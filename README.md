@@ -7,7 +7,7 @@ This project acts as a bridge between static and dynamic analysis. It enriches t
 It relies on the following dependencies:
 * [Famix-Bridge](https://github.com/moosetechnology/Famix-Bridge)
 * [Famix-CallGraphs](https://github.com/jecisc/Famix-CallGraphs)
-* [FamixCallStack](https://github.com/LeoDefossez/FamixCallStack)
+* [FamixCallStack](https://github.com/moosetechnology/FamixCallStack)
 
 ## Installation
 
@@ -15,7 +15,7 @@ To install the project in your Pharo image execute:
 
 ```Smalltalk
 Metacello new
-    baseline: 'Famix-CallGraph-Contextualizer';
-    githubUser: 'LeoDefossez' project: 'Famix-CallGraph-Contextualizer' commitish: 'main' path: 'src';
+    baseline: 'FamixCallGraphsContextualizer';
+    githubUser: 'LeoDefossez' project: 'Famix-CallGraphs-Contextualizer' commitish: 'master' path: 'src';
     load
 ```
