@@ -29,17 +29,17 @@ BaselineOfFamixCallGraphsContextualizer >> baseline: spec [
 { #category : 'dependencies' }
 BaselineOfFamixCallGraphsContextualizer >> famixBridge: spec [
 
-	spec baseline: 'FamixBridge' with: [ spec repository: 'github://moosetechnology/Famix-Bridge:main/src' ]
+	spec baseline: 'FamixBridge' with: [ spec repository: 'github://moosetechnology/Famix-Bridge/src' ]
 ]
 
 { #category : 'dependencies' }
 BaselineOfFamixCallGraphsContextualizer >> famixCallGraphs: spec [
 
-	spec baseline: 'FamixBridge' with: [ spec repository: 'github://jecisc/Famix-CallGraphs:main/src' ]
+	spec baseline: 'FamixCallGraphs' with: [ spec repository: 'github://jecisc/Famix-CallGraphs/src' ]
 ]
 
 { #category : 'dependencies' }
 BaselineOfFamixCallGraphsContextualizer >> famixCallStacks: spec [
 
-	spec baseline: 'FamixCallStack' with: [ spec repository: 'github://moosetechnology/FamixCallStack:main/src' ]
+	spec baseline: 'FamixCallStack' with: [ spec repository: 'github://moosetechnology/FamixCallStack/src' ]
 ]
