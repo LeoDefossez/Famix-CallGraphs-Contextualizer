@@ -11,9 +11,11 @@ BaselineOfFamixCallGraphsContextualizer >> baseline: spec [
 	<baseline>
 	spec for: #common do: [ 
 			"Dependencies"
+			self gitBridge: spec.
 			self famixBridge: spec.
 			self famixCallGraphs: spec.
 			self famixCallStacks: spec.
+			
 
 			"Packages"
 			spec
@@ -42,4 +44,12 @@ BaselineOfFamixCallGraphsContextualizer >> famixCallGraphs: spec [
 BaselineOfFamixCallGraphsContextualizer >> famixCallStacks: spec [
 
 	spec baseline: 'FamixCallStack' with: [ spec repository: 'github://moosetechnology/FamixCallStack/src' ]
+]
+
+{ #category : 'dependencies' }
+BaselineOfFamixCallGraphsContextualizer >> gitBridge: spec [
+
+	self flag: #todo. "Already a dependency of FamixCallGraphs, should not need to import this"
+
+	spec baseline: 'GitBridge' with: [ spec repository: 'github://jecisc/GitBridge:v1.x.x/src' ]
 ]
