@@ -1,7 +1,9 @@
-public class A {
+package example1;
+
+public class A1 {
     
     public static void main(String[] args) {
-        B b = new B();
+        B1 b = new B1();
         
         b.method();
         b.method(args);

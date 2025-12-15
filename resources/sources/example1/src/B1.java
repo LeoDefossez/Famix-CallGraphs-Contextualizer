@@ -1,4 +1,5 @@
-public class B {
+package example1;
+public class B1 {
     
     public void method(){
     }
