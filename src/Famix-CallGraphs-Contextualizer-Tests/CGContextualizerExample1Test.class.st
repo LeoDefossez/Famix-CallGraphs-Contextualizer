@@ -8,12 +8,6 @@ Class {
 	#package : 'Famix-CallGraphs-Contextualizer-Tests'
 }
 
-{ #category : 'running' }
-CGContextualizerExample1Test >> performTest [
-
-	FamixCallGraphAdditionalProperties newInstanceDuring: [ super performTest ]
-]
-
 { #category : 'tests' }
 CGContextualizerExample1Test >> testApplyOn [
 
@@ -24,8 +18,8 @@ CGContextualizerExample1Test >> testApplyOn [
 
 	self assert: tracedNodes size equals: 3.
 
-	self assert: methodsName first equals: '<Default Package>.A.main(String[])'.
-	self assert: methodsName second equals: '<Default Package>.B.method(String[])'.
+	self assert: methodsName first equals: 'example1.A1.main(String[])'.
+	self assert: methodsName second equals: 'example1.B1.method(String[])'.
 	self assert: methodsName third equals: 'java.lang.Runtime.exec(String)'
 ]
 
@@ -37,8 +31,8 @@ CGContextualizerExample1Test >> testCollectStackMethodsFrom [
 	
 	self assert: methods size equals: 3.
 	
-	self assert: methods first mooseName equals: '<Default Package>.A.main(String[])'.
-	self assert: methods second mooseName equals: '<Default Package>.B.method(String[])'.
+	self assert: methods first mooseName equals: 'example1.A1.main(String[])'.
+	self assert: methods second mooseName equals: 'example1.B1.method(String[])'.
 	self assert: methods third mooseName equals: 'java.lang.Runtime.exec(String)'
 	
 ]

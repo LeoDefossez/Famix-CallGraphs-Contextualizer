@@ -64,7 +64,7 @@ CGContextualizer >> tracePath: callStackSequence in: aGraph [
 	"Iterate on all stacks"
 	callStackSequence do: [ :targetMethod |
 			next callees
-				detect: [ :each | each realMethod mooseName = targetMethod mooseName ]
+				detect: [ :each |  each realMethod mooseName = targetMethod mooseName ]
 				ifFound: [ :each |
 						each additionalPropertiesNamed: self propertyName put: targetMethod.
 						tracedNodes add: each.

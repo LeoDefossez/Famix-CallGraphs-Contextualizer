@@ -58,6 +58,12 @@ FamixAbstractJavaCallGraphContextualizerBuilderTestCase >> openSources [
 	self resources anyOne javaSourcesFolder openInOSFileBrowser
 ]
 
+{ #category : 'running' }
+FamixAbstractJavaCallGraphContextualizerBuilderTestCase >> performTest [
+
+	FamixCallGraphAdditionalProperties newInstanceDuring: [ super performTest ]
+]
+
 { #category : 'helpers' }
 FamixAbstractJavaCallGraphContextualizerBuilderTestCase >> sourceResource [
 	"I return the instance of the test resource I'm using to build the sources of a java project"
