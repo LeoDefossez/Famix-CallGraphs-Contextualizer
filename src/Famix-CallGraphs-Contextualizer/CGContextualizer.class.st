@@ -1,6 +1,53 @@
+"
+I bridge the gap between static analysis (FamixCallGraph) and dynamic analysis (FamixCallStack). 
+My responsibility is to contextualize a static call graph by applying execution traces (call stacks) onto it.
+
+I operate in two distinct modes:
+
+1. **Graph Generator & Contextualizer:**
+   I build the graph from source models, then apply call stacks to filter/enrich it.
+   
+2. **Contextualizer:**
+	I apply a call stack directly to an existing graph instance.
+
+## Examples
+
+### 1. Full Creation Mode (Builder)
+	This mode is useful when you start from raw Famix models.
+
+```smalltalk
+contextualizer := CGContextualizer new
+    mainModel: model1;
+    addLibraryModel: model2;
+    entryPoint: aFamixMethod;
+    generateGraph.
+
+""Apply dynamic context""
+contextualizer
+    apply: csModel1;
+    apply: csModel2.
+
+""Access results""
+contextualizer graph.
+contextualizer allContextualizedNodes.
+```
+
+### 2. Application Mode (Utility)
+Use this if you already have a calculated graph and want to filter it with a stack.
+```smalltalk
+	CGContextualizer 
+		apply: aCSModel 
+		on: aGraph.
+```
+"
 Class {
 	#name : 'CGContextualizer',
 	#superclass : 'Object',
+	#instVars : [
+		'workspace',
+		'entryPoint',
+		'graph'
+	],
 	#category : 'Famix-CallGraphs-Contextualizer',
 	#package : 'Famix-CallGraphs-Contextualizer'
 }
@@ -9,6 +56,26 @@ Class {
 CGContextualizer class >> apply: aCSModel on: aGraph [
 
 	^ self new apply: aCSModel on: aGraph
+]
+
+{ #category : 'as yet unclassified' }
+CGContextualizer >> addLibraryModel: aMooseModel [
+
+	self workspace addLibraryModel: aMooseModel
+]
+
+{ #category : 'as yet unclassified' }
+CGContextualizer >> allContextualizedNodes [
+	"Actually returns a Dictionary of every nodes with additionnal properties"
+
+	^ (graph allNodes collect: [ :each | each -> each additionalProperties ] thenReject: [ :each | each value isNil ])
+		  asDictionary
+]
+
+{ #category : 'as yet unclassified' }
+CGContextualizer >> apply: aFamixCSModel [
+
+	^ self apply: aFamixCSModel on: graph
 ]
 
 { #category : 'as yet unclassified' }
@@ -34,6 +101,17 @@ CGContextualizer >> collectCallStackMethodsFrom: aCSModel [
 	^ (aCSModel allWithType: FamixCSStack) anyOne stacklines collect: [ :each | each method ]
 ]
 
+{ #category : 'as yet unclassified' }
+CGContextualizer >> entryPoint [
+	^ entryPoint
+]
+
+{ #category : 'as yet unclassified' }
+CGContextualizer >> entryPoint: aFamixMethod [
+
+	entryPoint := aFamixMethod
+]
+
 { #category : 'formatting' }
 CGContextualizer >> formatTracedNodes: tracedNodes [
 
@@ -41,6 +119,24 @@ CGContextualizer >> formatTracedNodes: tracedNodes [
 			  each -> {
 				  ('receiver' -> each additionalProperties values first stacklines first receiver).
 				  ('arguments' -> each additionalProperties values first stacklines first arguments) } ]
+]
+
+{ #category : 'as yet unclassified' }
+CGContextualizer >> generateGraph [
+
+	self workspace interModelModeDuring: [ graph := (FamixJavaCHABuilder entryPoint: self entryPoint) build ]
+]
+
+{ #category : 'as yet unclassified' }
+CGContextualizer >> graph [
+
+	^ graph
+]
+
+{ #category : 'as yet unclassified' }
+CGContextualizer >> mainModel: aFamixJavaModel [
+
+	self workspace mainModel: aFamixJavaModel
 ]
 
 { #category : 'as yet unclassified' }
@@ -72,4 +168,10 @@ CGContextualizer >> tracePath: callStackSequence in: aGraph [
 				ifNone: [ "If not found stop the search here" ^ tracedNodes ] ].
 
 	^ tracedNodes
+]
+
+{ #category : 'as yet unclassified' }
+CGContextualizer >> workspace [
+
+	^ workspace ifNil: [ workspace := MooseWorkspace new ]
 ]
