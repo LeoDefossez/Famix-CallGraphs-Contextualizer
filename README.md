@@ -26,47 +26,37 @@ You must first generate a trace from the target application. Use the external ex
 ### 2. Prepare the Models
 You need to load your models and build the static call graph before applying the context.
 
-**Scenario A: Single Static Model**
-Use this standard setup when your application is contained in one Moose model.
+Here an exemple as how you can do import theses informations :
 
-```smalltalk
-"1. Load the models"
-staticModel := MooseModel root allModels detect: [ :m | m name = 'MyJavaModel' ].
-stackModel := MooseModel root allModels detect: [ :m | m name = 'MyStackModel' ].
+```
+"## Variables to define"
+origin := '/Users/.../.../Models/' asFileReference. 
+appPath := origin / 'App'.
+libraryPath := origin / 'Library'.
+stackPath := origin / 'JDIOutput.cs'
 
-"2. Define the Entry Point (e.g., the first method of the stack or a known main method)"
-entryPoint := staticModel allMethods detect: [ :m | m name = 'main' ]. 
-
-"3. Build the Static Call Graph"
-graph := (FamixJavaCHABuilder entryPoint: entryPoint) build.
+"## Import models"
+appModel := (FamixJavaFoldersImporter importFolder: appPath) first.
+libraryModel := (FamixJavaFoldersImporter importFolder: libraryPath) first.
+stackModel := CallStackJsonReader import: stackPath.
 ```
 
-**Scenario B: Multiple Static Models (Application + Libraries)**
-```smalltalk
-"1. Load all related models"
-appModel := MooseModel root allModels detect: [ :m | m name = 'MyAppModel' ].
-libraryModel := MooseModel root allModels detect: [ :m | m name = 'MyLibraryModel' ].
-stackModel := MooseModel root allModels detect: [ :m | m name = 'MyStackModel' ].
+### 3. Contextualize the Graph
 
-"2. Configure the Workspace for Inter-Model analysis"
-workspace := MooseWorkspace new
-                 mainModel: appModel;
-                 addLibraryModel: libraryModel.
+Once you have your models, you just need to build your graph and apply your call stack on it
 
-"3. Build the Graph using the Workspace context"
-entryPoint := appModel allMethods detect: [ :m | m name = 'main' ]. 
-
-workspace interModelModeDuring: [
-    graph := (FamixJavaCHABuilder entryPoint: entryPoint) build
-].
 ```
+"1. Build the call graph (Here we use CHA but it can be other graph types)"
+graph := FamixJavaCHABuilder
+	         buildFrom: victimModel
+	         withDependencies: { ccModel }
+	         forEntry: (victimModel entityNamed: 'ysoserial.payloads.Victim.main(String[])').
 
-### 3. Contextualize the Graph
-Apply the stack data to the graph to generate the contextualized path.
+"2. Apply context"
+graph apply: stackModel .
 
-```smalltalk
-"Returns a collection of mapped nodes enriched with runtime data, and add this data directly on callGraph"
-contextualizedPath := CGContextualizer apply: stackModel on: graph.
+"3. Check all nodes with additionnals properties"
+graph allNodesWithAdditionalProperties
 ```
 
 ## Documentation
