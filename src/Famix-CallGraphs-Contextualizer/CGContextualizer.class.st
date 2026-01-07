@@ -59,9 +59,27 @@ CGContextualizer class >> apply: aCSModel on: aGraph [
 ]
 
 { #category : 'as yet unclassified' }
+CGContextualizer class >> generateGraphOf: mainModel withDependecies: libraryModels startingForm: entryPoint [
+
+	| contextualizer |
+	contextualizer := self new
+		                  mainModel: mainModel;
+		                  addLibraryModels: libraryModels;
+		                  entryPoint: entryPoint;
+		                  generateGraph.
+	^ contextualizer
+]
+
+{ #category : 'as yet unclassified' }
 CGContextualizer >> addLibraryModel: aMooseModel [
 
 	self workspace addLibraryModel: aMooseModel
+]
+
+{ #category : 'as yet unclassified' }
+CGContextualizer >> addLibraryModels: aCollection [
+
+	aCollection do: [ :each | self workspace addLibraryModel: each ]
 ]
 
 { #category : 'as yet unclassified' }
