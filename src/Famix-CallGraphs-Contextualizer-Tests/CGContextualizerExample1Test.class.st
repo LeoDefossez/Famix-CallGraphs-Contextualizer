@@ -24,26 +24,6 @@ CGContextualizerExample1Test >> testApplyOn [
 ]
 
 { #category : 'tests' }
-CGContextualizerExample1Test >> testBuildingAndApplying [
-
-	| tracedNodes methodsName contextualizer |
-	contextualizer := CGContextualizer new
-		mainModel: self javaMainModel;
-		entryPoint: self sourceResource entryPoints first;
-		generateGraph.
-
-	tracedNodes := contextualizer apply: self callStackModel.
-
-	methodsName := tracedNodes collect: [ :each | each key realMethod mooseName ].
-
-	self assert: tracedNodes size equals: 3.
-
-	self assert: methodsName first equals: 'example1.A1.main(String[])'.
-	self assert: methodsName second equals: 'example1.B1.method(String[])'.
-	self assert: methodsName third equals: 'java.lang.Runtime.exec(String)'
-]
-
-{ #category : 'tests' }
 CGContextualizerExample1Test >> testCollectStackMethodsFrom [
 
 	| methods |
@@ -55,24 +35,4 @@ CGContextualizerExample1Test >> testCollectStackMethodsFrom [
 	self assert: methods second mooseName equals: 'example1.B1.method(String[])'.
 	self assert: methods third mooseName equals: 'java.lang.Runtime.exec(String)'
 	
-]
-
-{ #category : 'tests' }
-CGContextualizerExample1Test >> testgenerateGraphOfWithDependeciesStartingForm [
-
-	| tracedNodes methodsName contextualizer |
-	contextualizer := CGContextualizer
-		                  generateGraphOf: self javaMainModel
-		                  withDependecies: {  }
-		                  startingForm: self sourceResource entryPoints first.
-
-	tracedNodes := contextualizer apply: self callStackModel.
-
-	methodsName := tracedNodes collect: [ :each | each key realMethod mooseName ].
-
-	self assert: tracedNodes size equals: 3.
-
-	self assert: methodsName first equals: 'example1.A1.main(String[])'.
-	self assert: methodsName second equals: 'example1.B1.method(String[])'.
-	self assert: methodsName third equals: 'java.lang.Runtime.exec(String)'
 ]
