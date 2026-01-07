@@ -28,7 +28,7 @@ CGContextualizerExample1Test >> testBuildingAndApplying [
 
 	| tracedNodes methodsName contextualizer |
 	contextualizer := CGContextualizer new
-		mainModel: self javaModel;
+		mainModel: self javaMainModel;
 		entryPoint: self sourceResource entryPoints first;
 		generateGraph.
 
@@ -62,7 +62,7 @@ CGContextualizerExample1Test >> testgenerateGraphOfWithDependeciesStartingForm [
 
 	| tracedNodes methodsName contextualizer |
 	contextualizer := CGContextualizer
-		                  generateGraphOf: self javaModel
+		                  generateGraphOf: self javaMainModel
 		                  withDependecies: {  }
 		                  startingForm: self sourceResource entryPoints first.
 

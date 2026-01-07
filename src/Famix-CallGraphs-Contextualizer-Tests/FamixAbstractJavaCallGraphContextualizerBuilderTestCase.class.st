@@ -46,9 +46,9 @@ FamixAbstractJavaCallGraphContextualizerBuilderTestCase >> graph [
 ]
 
 { #category : 'helpers' }
-FamixAbstractJavaCallGraphContextualizerBuilderTestCase >> javaModel [
+FamixAbstractJavaCallGraphContextualizerBuilderTestCase >> javaMainModel [
 
-	^ self sourceResource javaModel
+	^ self sourceResource javaMainModel
 ]
 
 { #category : 'open sources' }

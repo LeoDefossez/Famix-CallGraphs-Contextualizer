@@ -9,6 +9,7 @@ Class {
 CGContextualizerExample2Test >> testApplyOn [
 
 	| tracedNodes methodsName |
+	"Here the result is not the same as the stack because we do not have access to the external dependencies on the graph"
 	tracedNodes := CGContextualizer apply: self callStackModel on: self graph.
 
 	methodsName := tracedNodes collect: [ :each | each key realMethod mooseName ].

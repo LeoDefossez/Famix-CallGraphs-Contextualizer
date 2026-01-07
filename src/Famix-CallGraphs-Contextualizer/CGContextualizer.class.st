@@ -18,7 +18,7 @@ I operate in two distinct modes:
 ```smalltalk
 contextualizer := CGContextualizer new
     mainModel: model1;
-    addLibraryModel: model2;
+    addLibraryModels: { model2 };
     entryPoint: aFamixMethod;
     generateGraph.
 
@@ -176,9 +176,9 @@ CGContextualizer >> tracePath: callStackSequence in: aGraph [
 		        yourself.
 	
 	"Iterate on all stacks"
-	callStackSequence do: [ :targetMethod |
+	callStackSequence do: [ :targetMethod | 1halt.
 			next callees
-				detect: [ :each |  each realMethod mooseName = targetMethod mooseName ]
+				detect: [ :each | each realMethod mooseName = targetMethod mooseName ]
 				ifFound: [ :each |
 						each additionalPropertiesNamed: self propertyName put: targetMethod.
 						tracedNodes add: each.
