@@ -41,7 +41,7 @@ libraryModel := (FamixJavaFoldersImporter importFolder: libraryPath) first.
 stackModel := CallStackJsonReader import: stackPath.
 ```
 
-### 3. Contextualize the Graph
+### 3. Contextualize the Graph
 
 Once you have your models, you just need to build your graph and apply your call stack on it
 
