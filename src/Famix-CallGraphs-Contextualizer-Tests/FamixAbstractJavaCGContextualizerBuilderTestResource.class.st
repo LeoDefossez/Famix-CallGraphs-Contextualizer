@@ -1,17 +1,18 @@
 Class {
-	#name : 'FamixAbstractCGContextualizerTestResource',
+	#name : 'FamixAbstractJavaCGContextualizerBuilderTestResource',
 	#superclass : 'TestResource',
 	#instVars : [
 		'graph',
 		'callStackModel',
 		'javaMainModel'
 	],
-	#category : 'Famix-CallGraphs-Contextualizer-Tests',
-	#package : 'Famix-CallGraphs-Contextualizer-Tests'
+	#category : 'Famix-CallGraphs-Contextualizer-Tests-Resources',
+	#package : 'Famix-CallGraphs-Contextualizer-Tests',
+	#tag : 'Resources'
 }
 
 { #category : 'accessing' }
-FamixAbstractCGContextualizerTestResource class >> callStackFile [
+FamixAbstractJavaCGContextualizerBuilderTestResource class >> callStackFile [
 	"Return the java file containing the sources to parse for those tests"
 
 	| file |
@@ -24,7 +25,7 @@ FamixAbstractCGContextualizerTestResource class >> callStackFile [
 ]
 
 { #category : 'accessing' }
-FamixAbstractCGContextualizerTestResource class >> javaSourcesFolder [
+FamixAbstractJavaCGContextualizerBuilderTestResource class >> javaSourcesFolder [
 	"Return the java folder containing the sources to parse for those tests"
 
 	| folder |
@@ -36,7 +37,7 @@ FamixAbstractCGContextualizerTestResource class >> javaSourcesFolder [
 ]
 
 { #category : 'accessing' }
-FamixAbstractCGContextualizerTestResource class >> sourcesFolder [
+FamixAbstractJavaCGContextualizerBuilderTestResource class >> sourcesFolder [
 	"Return the java folder containing the sources to parse for those tests"
 
 	| folder |
@@ -49,54 +50,54 @@ FamixAbstractCGContextualizerTestResource class >> sourcesFolder [
 ]
 
 { #category : 'accessing' }
-FamixAbstractCGContextualizerTestResource >> callStackFile [
+FamixAbstractJavaCGContextualizerBuilderTestResource >> callStackFile [
 
 	^ self class callStackFile
 ]
 
 { #category : 'accessing' }
-FamixAbstractCGContextualizerTestResource >> callStackModel [
+FamixAbstractJavaCGContextualizerBuilderTestResource >> callStackModel [
 
 	^ callStackModel
 ]
 
 { #category : 'accessing' }
-FamixAbstractCGContextualizerTestResource >> entryPoints [
+FamixAbstractJavaCGContextualizerBuilderTestResource >> entryPoints [
 
 	^ javaMainModel allMethods select: [ :method | method name = 'main' ]
 ]
 
 { #category : 'accessing' }
-FamixAbstractCGContextualizerTestResource >> generateGraph [
+FamixAbstractJavaCGContextualizerBuilderTestResource >> generateGraph [
 
 	graph := (FamixJavaCHABuilder entryPoints: self entryPoints) build
 ]
 
 { #category : 'accessing' }
-FamixAbstractCGContextualizerTestResource >> graph [
+FamixAbstractJavaCGContextualizerBuilderTestResource >> graph [
 	^ graph
 ]
 
 { #category : 'accessing' }
-FamixAbstractCGContextualizerTestResource >> importModels [
+FamixAbstractJavaCGContextualizerBuilderTestResource >> importModels [
 
 	javaMainModel := (FamixJavaFoldersImporter importFolders: { self javaSourcesFolder }) anyOne.
 	callStackModel := CallStackJsonReader import: self callStackFile
 ]
 
 { #category : 'accessing' }
-FamixAbstractCGContextualizerTestResource >> javaMainModel [
+FamixAbstractJavaCGContextualizerBuilderTestResource >> javaMainModel [
 
 	^ javaMainModel
 ]
 
 { #category : 'accessing' }
-FamixAbstractCGContextualizerTestResource >> javaSourcesFolder [
+FamixAbstractJavaCGContextualizerBuilderTestResource >> javaSourcesFolder [
 	^ self class javaSourcesFolder
 ]
 
 { #category : 'accessing' }
-FamixAbstractCGContextualizerTestResource >> setUp [
+FamixAbstractJavaCGContextualizerBuilderTestResource >> setUp [
 
 	super setUp.
 	self importModels.
@@ -104,7 +105,7 @@ FamixAbstractCGContextualizerTestResource >> setUp [
 ]
 
 { #category : 'accessing' }
-FamixAbstractCGContextualizerTestResource >> tearDown [
+FamixAbstractJavaCGContextualizerBuilderTestResource >> tearDown [
 
 	javaMainModel := nil.
 	graph := nil.

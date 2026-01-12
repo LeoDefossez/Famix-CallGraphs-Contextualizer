@@ -1,8 +1,9 @@
 Class {
 	#name : 'CGContextualizerExample2Test',
-	#superclass : 'FamixAbstractJavaCallGraphContextualizerBuilderTestCase',
-	#category : 'Famix-CallGraphs-Contextualizer-Tests',
-	#package : 'Famix-CallGraphs-Contextualizer-Tests'
+	#superclass : 'FamixAbstractJavaCGContextualizerBuilderTestCase',
+	#category : 'Famix-CallGraphs-Contextualizer-Tests-Tests',
+	#package : 'Famix-CallGraphs-Contextualizer-Tests',
+	#tag : 'Tests'
 }
 
 { #category : 'tests' }

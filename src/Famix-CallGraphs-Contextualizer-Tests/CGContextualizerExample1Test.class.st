@@ -3,9 +3,10 @@ A CGContextualizerTest is a test class for testing the behavior of CGContextuali
 "
 Class {
 	#name : 'CGContextualizerExample1Test',
-	#superclass : 'FamixAbstractJavaCallGraphContextualizerBuilderTestCase',
-	#category : 'Famix-CallGraphs-Contextualizer-Tests',
-	#package : 'Famix-CallGraphs-Contextualizer-Tests'
+	#superclass : 'FamixAbstractJavaCGContextualizerBuilderTestCase',
+	#category : 'Famix-CallGraphs-Contextualizer-Tests-Tests',
+	#package : 'Famix-CallGraphs-Contextualizer-Tests',
+	#tag : 'Tests'
 }
 
 { #category : 'tests' }

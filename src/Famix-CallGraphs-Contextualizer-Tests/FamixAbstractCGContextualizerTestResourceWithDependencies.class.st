@@ -1,11 +1,12 @@
 Class {
 	#name : 'FamixAbstractCGContextualizerTestResourceWithDependencies',
-	#superclass : 'FamixAbstractCGContextualizerTestResource',
+	#superclass : 'FamixAbstractJavaCGContextualizerBuilderTestResource',
 	#instVars : [
 		'librariesModels'
 	],
-	#category : 'Famix-CallGraphs-Contextualizer-Tests',
-	#package : 'Famix-CallGraphs-Contextualizer-Tests'
+	#category : 'Famix-CallGraphs-Contextualizer-Tests-Resources',
+	#package : 'Famix-CallGraphs-Contextualizer-Tests',
+	#tag : 'Resources'
 }
 
 { #category : 'as yet unclassified' }

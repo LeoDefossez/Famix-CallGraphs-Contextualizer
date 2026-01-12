@@ -4,6 +4,7 @@ I offer a graph on a model which depend on external dependencies, while providin
 Class {
 	#name : 'CGContextualizerExample3Resource',
 	#superclass : 'FamixAbstractCGContextualizerTestResourceWithDependencies',
-	#category : 'Famix-CallGraphs-Contextualizer-Tests',
-	#package : 'Famix-CallGraphs-Contextualizer-Tests'
+	#category : 'Famix-CallGraphs-Contextualizer-Tests-Resources',
+	#package : 'Famix-CallGraphs-Contextualizer-Tests',
+	#tag : 'Resources'
 }
