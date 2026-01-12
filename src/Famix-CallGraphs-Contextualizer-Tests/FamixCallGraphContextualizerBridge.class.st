@@ -15,5 +15,5 @@ FamixCallGraphContextualizerBridge class >> resources [
 { #category : 'accessing' }
 FamixCallGraphContextualizerBridge class >> sources [
 
-	^ self resources / 'sources' / 'contextualizer'
+	^ self resources / 'sources'
 ]
