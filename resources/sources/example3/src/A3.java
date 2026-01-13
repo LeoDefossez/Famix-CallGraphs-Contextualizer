@@ -1,6 +1,6 @@
 package example3;
 
-import example3External.B3;
+import example3ExternalDepencies.B3;
 
 public class A3 {
     

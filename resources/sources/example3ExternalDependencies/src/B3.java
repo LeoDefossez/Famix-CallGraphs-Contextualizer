@@ -1,5 +1,4 @@
-package example3External;
-
+package src;
 public class B3 {
     
     public void method(Object a){

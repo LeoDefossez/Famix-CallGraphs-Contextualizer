@@ -16,3 +16,5 @@ To regenerate test artifacts (e.g., `exampleN.cs`), use the **[JavaCallStackExtr
 | Artifact | Configuration Notes |
 | :--- | :--- |
 | **Example 1** | Use the **default** `config.json` provided in the extractor repository. |
+| **Example 2** | Use the **default** `config.json` provided in the extractor repository. |
+| **Example 3** | Use the **default** `config.json` provided in the extractor repository. |
