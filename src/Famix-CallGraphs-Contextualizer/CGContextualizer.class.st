@@ -1,15 +1,15 @@
 "
 I contextualize a static call graph (`FamixCallGraph`) using dynamic execution traces (`FamixCallStack`).
 
-## Key Messages
-
-- `apply: aFamixCallStack on: aFamixCallGraph` : Main entry point. Projects the given stack onto the graph.
-
 ## Example
 ```
-CGContextualizer new 
-    apply: myStack 
-    on: myGraph
+""returns all path of enriched nodes""
+aContextualizerClass new
+		  mainModel: mainModel;
+		  librariesModels: librariesModels;
+		  entryPoints: { aFamixMethod };
+		  callStackModels: { callStackModel };
+		  run
 ```
 "
 Class {
