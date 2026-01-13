@@ -31,7 +31,7 @@ FamixAbstractCGContextualizerTestResourceWithDependencies class >> javaExternalS
 	| folders |
 	folders := self externalSourcesFolders collect: [ :each | each / 'src' ].
 
-	folders do: [ :each | each ifAbsent: [ self error: 'Folder does not exists ' , folders pathString ] ].
+	folders do: [ :each | each ifAbsent: [ self error: 'Folder does not exists ' , each pathString ] ].
 
 	^ folders
 ]
@@ -49,8 +49,8 @@ FamixAbstractCGContextualizerTestResourceWithDependencies >> generateGraph [
 FamixAbstractCGContextualizerTestResourceWithDependencies >> importModels [
 
 	super importModels.
-	librariesModels := self javaExternalSourcesFolders collect: [ :each |
-		                   (FamixJavaFoldersImporter importFolders: { self javaSourcesFolder }) anyOne ]
+
+	librariesModels := FamixJavaFoldersImporter importFolders: self javaExternalSourcesFolders
 ]
 
 { #category : 'accessing' }

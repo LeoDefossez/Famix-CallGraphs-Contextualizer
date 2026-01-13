@@ -13,7 +13,7 @@ CGContextualizerExample3Test >> testApplyOn [
 	self skip. "Skipped because the problem seems to come from FamixBridge"
 	self flag:#todo. "correct this test case"
 	tracedNodes := CGContextualizer apply: self callStackModel on: self graph.
-
+	self halt.
 	methodsName := tracedNodes collect: [ :each | each key realMethod mooseName ].
 
 	self assert: tracedNodes size equals: 4.

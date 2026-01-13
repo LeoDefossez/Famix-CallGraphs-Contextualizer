@@ -22,7 +22,7 @@ Class {
 { #category : 'as yet unclassified' }
 CGContextualizer class >> apply: aCSModel on: aGraph [
 
-	^ self new apply: aCSModel on: aGraph
+	^ CGStrictContextualizer new apply: aCSModel on: aGraph
 ]
 
 { #category : 'as yet unclassified' }
@@ -48,6 +48,12 @@ CGContextualizer >> collectCallStackMethodsFrom: aCSModel [
 	^ (aCSModel allWithType: FamixCSStack) anyOne stacklines collect: [ :each | each method ]
 ]
 
+{ #category : 'as yet unclassified' }
+CGContextualizer >> findNodeFor: targetMethod from: currentNode in: aGraph [
+
+	self subclassResponsibility
+]
+
 { #category : 'formatting' }
 CGContextualizer >> formatTracedNodes: tracedNodes [
 
@@ -55,6 +61,14 @@ CGContextualizer >> formatTracedNodes: tracedNodes [
 			  each -> {
 				  ('receiver' -> each additionalProperties values first stacklines first receiver).
 				  ('arguments' -> each additionalProperties values first stacklines first arguments) } ]
+]
+
+{ #category : 'as yet unclassified' }
+CGContextualizer >> initialNodeFor: aGraph [
+
+	^ FamixCallGraphNode new
+		addCallee: aGraph entryPoint;
+		yourself
 ]
 
 { #category : 'as yet unclassified' }
@@ -66,24 +80,23 @@ CGContextualizer >> propertyName [
 { #category : 'as yet unclassified' }
 CGContextualizer >> tracePath: callStackSequence in: aGraph [
 
-	| next tracedNodes |
+	| currentNode tracedNodes |
 	"Stores all traced nodes"
 	tracedNodes := OrderedCollection new.
 
 	"Use this as an artificial first node to initialize algorithm"
-	next := FamixCallGraphNode new
-		        addCallee: aGraph entryPoint;
-		        yourself.
+	currentNode := self initialNodeFor: aGraph. 
 
 	"Iterate on all stacks"
 	callStackSequence do: [ :targetMethod |
-			next callees
-				detect: [ :each | each realMethod mooseName = targetMethod mooseName ]
-				ifFound: [ :each |
-						each additionalPropertiesNamed: self propertyName put: targetMethod.
-						tracedNodes add: each.
-						next := each ]
-				ifNone: [ "If not found stop the search here" ^ tracedNodes ] ].
+			currentNode := self findNodeFor: targetMethod from: currentNode in: aGraph.
+
+			"If nil then its not possible to continue"
+			currentNode ifNil: [ ^ tracedNodes ].
+
+			"If not nil then enrich the graph and continue"
+			currentNode additionalPropertiesNamed: self propertyName put: targetMethod.
+			tracedNodes add: currentNode ].
 
 	^ tracedNodes
 ]
