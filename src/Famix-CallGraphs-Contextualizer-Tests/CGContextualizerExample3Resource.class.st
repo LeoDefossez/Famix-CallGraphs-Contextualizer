@@ -3,7 +3,7 @@ I offer a graph on a model which depend on external dependencies, while providin
 "
 Class {
 	#name : 'CGContextualizerExample3Resource',
-	#superclass : 'FamixAbstractCGContextualizerTestResourceWithDependencies',
+	#superclass : 'FamixAbstractJavaCGContextualizerBuilderTestResource',
 	#category : 'Famix-CallGraphs-Contextualizer-Tests-Resources',
 	#package : 'Famix-CallGraphs-Contextualizer-Tests',
 	#tag : 'Resources'

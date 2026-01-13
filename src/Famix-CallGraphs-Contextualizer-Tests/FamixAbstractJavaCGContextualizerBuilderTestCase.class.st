@@ -40,16 +40,21 @@ FamixAbstractJavaCGContextualizerBuilderTestCase >> callStackModel [
 	^ self sourceResource callStackModel
 ]
 
-{ #category : 'helpers' }
-FamixAbstractJavaCGContextualizerBuilderTestCase >> graph [
+{ #category : 'running' }
+FamixAbstractJavaCGContextualizerBuilderTestCase >> createContextualizer: aContextualizerClass [
 
-	^ self sourceResource graph
+	^ aContextualizerClass new
+		  mainModel: self sourceResource javaMainModel;
+		  librariesModels: self sourceResource librariesModels;
+		  entryPoints: self sourceResource entryPoints;
+		  callStackModels: { self callStackModel };
+		  yourself
 ]
 
-{ #category : 'helpers' }
-FamixAbstractJavaCGContextualizerBuilderTestCase >> javaMainModel [
+{ #category : 'running' }
+FamixAbstractJavaCGContextualizerBuilderTestCase >> inferedContextualizer [
 
-	^ self sourceResource javaMainModel
+	^ self createContextualizer: CGInferedContextualizer
 ]
 
 { #category : 'open sources' }
@@ -70,4 +75,10 @@ FamixAbstractJavaCGContextualizerBuilderTestCase >> sourceResource [
 	"I return the instance of the test resource I'm using to build the sources of a java project"
 
 	^ self class sourceResource
+]
+
+{ #category : 'running' }
+FamixAbstractJavaCGContextualizerBuilderTestCase >> strictContextualizer [
+
+	^ self createContextualizer: CGStrictContextualizer
 ]

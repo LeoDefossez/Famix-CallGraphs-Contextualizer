@@ -15,6 +15,14 @@ CGContextualizer new
 Class {
 	#name : 'CGContextualizer',
 	#superclass : 'Object',
+	#instVars : [
+		'mainModel',
+		'librariesModels',
+		'callStackModels',
+		'graph',
+		'entryPoints',
+		'graphBuilder'
+	],
 	#category : 'Famix-CallGraphs-Contextualizer',
 	#package : 'Famix-CallGraphs-Contextualizer'
 }
@@ -22,7 +30,7 @@ Class {
 { #category : 'as yet unclassified' }
 CGContextualizer class >> apply: aCSModel on: aGraph [
 
-	^ CGStrictContextualizer new apply: aCSModel on: aGraph
+	^ self new apply: aCSModel on: aGraph
 ]
 
 { #category : 'as yet unclassified' }
@@ -42,6 +50,27 @@ CGContextualizer >> apply: aCSModel on: aGraph [
 ]
 
 { #category : 'as yet unclassified' }
+CGContextualizer >> buildGraph [
+
+	| workspace |
+	workspace := MooseWorkspace new mainModel: mainModel.
+	librariesModels do: [ :each | workspace addLibraryModel: each ].
+	
+	self createReflectivesHookOn: graphBuilder.
+
+	graph := workspace interModelModeDuring: [
+			         graphBuilder
+				         entryPoints: entryPoints;
+				         build ]
+]
+
+{ #category : 'settings' }
+CGContextualizer >> callStackModels: aCollection [
+
+	callStackModels := aCollection
+]
+
+{ #category : 'as yet unclassified' }
 CGContextualizer >> collectCallStackMethodsFrom: aCSModel [
 	"stacklines should be ordered by default"
 
@@ -49,9 +78,21 @@ CGContextualizer >> collectCallStackMethodsFrom: aCSModel [
 ]
 
 { #category : 'as yet unclassified' }
-CGContextualizer >> findNodeFor: targetMethod from: currentNode in: aGraph [
+CGContextualizer >> createReflectivesHookOn: aGraphBuilder [
 
 	self subclassResponsibility
+]
+
+{ #category : 'settings' }
+CGContextualizer >> entryPoints: aCollection [
+
+	entryPoints := aCollection
+]
+
+{ #category : 'as yet unclassified' }
+CGContextualizer >> findNodeFor: targetMethod from: currentNode in: aGraph [
+
+	^ currentNode callees detect: [ :each | each realMethod mooseName = targetMethod mooseName ] ifNone: [ nil ]
 ]
 
 { #category : 'formatting' }
@@ -63,6 +104,18 @@ CGContextualizer >> formatTracedNodes: tracedNodes [
 				  ('arguments' -> each additionalProperties values first stacklines first arguments) } ]
 ]
 
+{ #category : 'settings' }
+CGContextualizer >> graph [
+	
+	^ graph
+]
+
+{ #category : 'as yet unclassified' }
+CGContextualizer >> graphBuilder: aGraphBuilder [
+
+	graphBuilder := aGraphBuilder
+]
+
 { #category : 'as yet unclassified' }
 CGContextualizer >> initialNodeFor: aGraph [
 
@@ -72,9 +125,34 @@ CGContextualizer >> initialNodeFor: aGraph [
 ]
 
 { #category : 'as yet unclassified' }
+CGContextualizer >> initialize [
+
+	graphBuilder := FamixJavaCHABuilder new
+]
+
+{ #category : 'settings' }
+CGContextualizer >> librariesModels: aCollection [
+
+	librariesModels := aCollection asMooseGroup 
+]
+
+{ #category : 'settings' }
+CGContextualizer >> mainModel: aFamixModel [
+
+	mainModel := aFamixModel
+]
+
+{ #category : 'as yet unclassified' }
 CGContextualizer >> propertyName [
 
 	^ #property
+]
+
+{ #category : 'as yet unclassified' }
+CGContextualizer >> run [
+
+	self buildGraph.
+	^ callStackModels collect: [ :each | self apply: each on: graph ]
 ]
 
 { #category : 'as yet unclassified' }

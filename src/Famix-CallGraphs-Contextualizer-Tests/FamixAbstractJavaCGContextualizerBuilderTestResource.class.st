@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'graph',
 		'callStackModel',
-		'javaMainModel'
+		'javaMainModel',
+		'librariesModels'
 	],
 	#category : 'Famix-CallGraphs-Contextualizer-Tests-Resources',
 	#package : 'Famix-CallGraphs-Contextualizer-Tests',
@@ -22,6 +23,31 @@ FamixAbstractJavaCGContextualizerBuilderTestResource class >> callStackFile [
 	file ifAbsent: [ self error: 'File does not exists ' , file pathString ].
 
 	^ file
+]
+
+{ #category : 'as yet unclassified' }
+FamixAbstractJavaCGContextualizerBuilderTestResource class >> externalSourcesFolders [
+	"Return the java folders containing the external sources to parse for those tests"
+
+	| folders |
+	folders := (FamixCallGraphContextualizerBridge sources children select: #isDirectory) select: [ :each |
+			           each basename beginsWith:
+				           ((self name withoutPrefix: 'CGContextualizer') withoutSuffix: 'Resource') uncapitalized
+				           , 'ExternalDependencies' ].
+
+	^ folders
+]
+
+{ #category : 'accessing' }
+FamixAbstractJavaCGContextualizerBuilderTestResource class >> javaExternalSourcesFolders [
+	"Return the java folder containing the sources to parse for those tests"
+
+	| folders |
+	folders := self externalSourcesFolders collect: [ :each | each / 'src' ].
+
+	folders do: [ :each | each ifAbsent: [ self error: 'Folder does not exists ' , each pathString ] ].
+
+	^ folders
 ]
 
 { #category : 'accessing' }
@@ -68,21 +94,9 @@ FamixAbstractJavaCGContextualizerBuilderTestResource >> entryPoints [
 ]
 
 { #category : 'accessing' }
-FamixAbstractJavaCGContextualizerBuilderTestResource >> generateGraph [
+FamixAbstractJavaCGContextualizerBuilderTestResource >> javaExternalSourcesFolders [
 
-	graph := (FamixJavaCHABuilder entryPoints: self entryPoints) build
-]
-
-{ #category : 'accessing' }
-FamixAbstractJavaCGContextualizerBuilderTestResource >> graph [
-	^ graph
-]
-
-{ #category : 'accessing' }
-FamixAbstractJavaCGContextualizerBuilderTestResource >> importModels [
-
-	javaMainModel := (FamixJavaFoldersImporter importFolders: { self javaSourcesFolder }) anyOne.
-	callStackModel := CallStackJsonReader import: self callStackFile
+	^ self class javaExternalSourcesFolders
 ]
 
 { #category : 'accessing' }
@@ -97,11 +111,19 @@ FamixAbstractJavaCGContextualizerBuilderTestResource >> javaSourcesFolder [
 ]
 
 { #category : 'accessing' }
+FamixAbstractJavaCGContextualizerBuilderTestResource >> librariesModels [
+
+	^ librariesModels
+]
+
+{ #category : 'accessing' }
 FamixAbstractJavaCGContextualizerBuilderTestResource >> setUp [
 
 	super setUp.
-	self importModels.
-	self generateGraph
+	
+	javaMainModel := (FamixJavaFoldersImporter importFolders: { self javaSourcesFolder }) anyOne.
+	callStackModel := CallStackJsonReader import: self callStackFile.
+	librariesModels := FamixJavaFoldersImporter importFolders: self javaExternalSourcesFolders
 ]
 
 { #category : 'accessing' }
@@ -110,5 +132,7 @@ FamixAbstractJavaCGContextualizerBuilderTestResource >> tearDown [
 	javaMainModel := nil.
 	graph := nil.
 	callStackModel := nil.
+	librariesModels := nil.
+
 	super tearDown
 ]

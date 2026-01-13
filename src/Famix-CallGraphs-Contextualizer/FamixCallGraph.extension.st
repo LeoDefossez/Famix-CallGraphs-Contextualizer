@@ -7,9 +7,3 @@ FamixCallGraph >> allNodesWithAdditionalProperties [
 	^ (self allNodes collect: [ :each | each -> each additionalProperties ] thenReject: [ :each | each value isNil ])
 		  asDictionary
 ]
-
-{ #category : '*Famix-CallGraphs-Contextualizer' }
-FamixCallGraph >> applyCallStack: aCSModel [
-
-	^ CGContextualizer apply: aCSModel on: self
-]

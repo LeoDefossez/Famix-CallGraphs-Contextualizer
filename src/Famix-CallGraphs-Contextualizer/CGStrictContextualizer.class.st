@@ -6,7 +6,8 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-CGStrictContextualizer >> findNodeFor: targetMethod from: currentNode in: aGraph [
+CGStrictContextualizer >> createReflectivesHookOn: aGraphBuilder [
+	"Nothing"
 
-	^ currentNode callees detect: [ :each | each realMethod mooseName = targetMethod mooseName ] ifNone: [ nil ]
+	
 ]
