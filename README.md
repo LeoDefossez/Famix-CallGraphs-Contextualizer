@@ -46,14 +46,17 @@ stackModel := CallStackJsonReader import: stackPath.
 Once you have your models, you just need to build your graph and apply your call stack on it
 
 ```
-"1. Build the call graph (Here we use CHA but it can be other graph types)"
-graph := FamixJavaCHABuilder
-	         buildFrom: victimModel
-	         withDependencies: { ccModel }
-	         forEntry: (victimModel entityNamed: 'ysoserial.payloads.Victim.main(String[])').
 
-"2. Apply context"
-graph apply: stackModel .
+"1. Choose a contextualizer and give it theses informations"
+contextualizer := aContextualizerClass new
+		  mainModel: appModel;
+		  librariesModels: {libraryModel};
+		  entryPoints: { aFamixMethod }; "Entry point need to be a method of the appModel"
+		  callStackModels: { stackModel }.
+
+"2. Run the contextualization, and if needed collect the graph created"
+contextualizer run.
+graph := contextualizer graph.
 
 "3. Check all nodes with additionnals properties"
 graph allNodesWithAdditionalProperties
