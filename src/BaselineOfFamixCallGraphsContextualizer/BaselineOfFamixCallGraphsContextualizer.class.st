@@ -14,7 +14,6 @@ BaselineOfFamixCallGraphsContextualizer >> baseline: spec [
 			self gitBridge: spec.
 			self famixBridge: spec.
 			self famixCallGraphs: spec.
-			self famixCallGraphsPathFinder: spec.
 			self famixCallStacks: spec.
 			
 
@@ -39,12 +38,6 @@ BaselineOfFamixCallGraphsContextualizer >> famixBridge: spec [
 BaselineOfFamixCallGraphsContextualizer >> famixCallGraphs: spec [
 
 	spec baseline: 'FamixCallGraphs' with: [ spec repository: 'github://jecisc/Famix-CallGraphs/src' ]
-]
-
-{ #category : 'dependencies' }
-BaselineOfFamixCallGraphsContextualizer >> famixCallGraphsPathFinder: spec [
-
-	spec baseline: 'FamixCallGraphsPathFinder' with: [ spec repository: 'github://LeoDefossez/Famix-CallGraphs-PathFinder/src' ]
 ]
 
 { #category : 'dependencies' }
