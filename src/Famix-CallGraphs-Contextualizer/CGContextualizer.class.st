@@ -56,7 +56,7 @@ CGContextualizer >> buildGraph [
 	workspace := MooseWorkspace new mainModel: mainModel.
 	librariesModels do: [ :each | workspace addLibraryModel: each ].
 	
-	self createReflectivesHookOn: graphBuilder.
+	self createReflectivesHookOn: graphBuilder withWorkspace: workspace .
 
 	graph := workspace interModelModeDuring: [
 			         graphBuilder
@@ -78,7 +78,7 @@ CGContextualizer >> collectCallStackMethodsFrom: aCSModel [
 ]
 
 { #category : 'as yet unclassified' }
-CGContextualizer >> createReflectivesHookOn: aGraphBuilder [
+CGContextualizer >> createReflectivesHookOn: aGraphBuilder withWorkspace: workspace [ 
 
 	self subclassResponsibility
 ]
