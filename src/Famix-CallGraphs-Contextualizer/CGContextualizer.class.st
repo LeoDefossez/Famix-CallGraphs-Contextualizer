@@ -173,7 +173,7 @@ CGContextualizer >> tracePath: callStackSequence in: aGraph [
 			currentNode ifNil: [ ^ tracedNodes ].
 
 			"If not nil then enrich the graph and continue"
-			currentNode additionalPropertiesNamed: self propertyName put: targetMethod.
+			currentNode additionalPropertyNamed: self propertyName put: targetMethod.
 			tracedNodes add: currentNode ].
 
 	^ tracedNodes

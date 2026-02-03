@@ -8,3 +8,9 @@ Class {
 	#package : 'Famix-CallGraphs-Contextualizer-Tests',
 	#tag : 'Resources'
 }
+
+{ #category : 'as yet unclassified' }
+CGContextualizerExample2Resource class >> externalSourcesFolders [
+
+	^ {  }
+]

@@ -64,9 +64,8 @@ CGContextualizerExample2Test >> testStrictBuildGraph [
 	"This method is here to ensure the graph building works"
 
 	"There should be no path, so an error is thrown"
-
 	self
-		should: [
+		should: [ 
 				self strictContextualizer buildGraph graph
 					findPathFromNodeNamed: 'example2.A2.main(String[])'
 					toNodeNamed: 'java.lang.Runtime.exec(String)' ]
