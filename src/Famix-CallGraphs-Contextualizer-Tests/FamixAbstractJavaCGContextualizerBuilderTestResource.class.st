@@ -55,7 +55,7 @@ FamixAbstractJavaCGContextualizerBuilderTestResource class >> javaSourcesFolder 
 	"Return the java folder containing the sources to parse for those tests"
 
 	| folder |
-	folder := self sourcesFolder / 'src'.
+	folder := self sourcesFolder.
 
 	folder ifAbsent: [ self error: 'Folder does not exists ' , folder pathString ].
 

@@ -8,21 +8,30 @@ Class {
 { #category : 'as yet unclassified' }
 CGInferedContextualizer >> createReflectivesHookOn: aGraphBuilder withWorkspace: workspace [
 
-	| stacklines modelMethods modelMethodNames matches |
+	| stacklines modelMethodNames |
 	stacklines := callStackModels flatCollect: [ :each | each allWithType: FamixCSStackline ].
-	modelMethods := { mainModel } , librariesModels flatCollect: [ :each | each allMethods ].
-	modelMethodNames := modelMethods collect: #mooseName.
 
+	"Convert to Set to ensure O(1) lookup performance inside the reflective hook"
+	modelMethodNames := ({ mainModel } , librariesModels flatCollect: [ :each | each allMethods ])
+		                    collect: #mooseName
+		                    as: Set.
 
 	aGraphBuilder reflectiveHook: [ :node :builder |
 			workspace interModelModeDuring: [
-					(modelMethodNames includes: node realMethod mooseName)
-						ifTrue: [ "if true then add path to stacklines"
-								matches := stacklines select: [ :each | each method mooseName = node realMethod mooseName ].
-								matches := matches collect: [ :each | each next ifNotNil: [ :next | next method ] ].
-								matches := matches reject: [ :each | each isNil or: [ modelMethodNames includes: each mooseName ] ].
-								matches := matches do: [ :each |
-										           self flag: #todo. "We say the node is not a stub so that the graphs continue to create after this node, but is is a bit false, because it is in fact a stub"
-										           node addCallee: (builder nodeForMethodSignature: each signature kind: each parentType stub: false) ] ]
-						ifFalse: [ 1 halt "if false then reconstruct the path from the stackline to the graph" ] ] ]
+					| currentMooseName nextDynamicMethods |
+					currentMooseName := node realMethod mooseName.
+
+					"Extract the methods from the execution trace"
+					nextDynamicMethods := (stacklines
+						                       select: [ :stackline | stackline method mooseName = currentMooseName ]
+						                       thenCollect: [ :stackline | stackline next ifNotNil: #method ]) reject: #isNil.
+
+					(modelMethodNames includes: currentMooseName)
+						ifTrue: [ "In-model node: Filter out trace methods that are already resolved by static analysis"
+							nextDynamicMethods := nextDynamicMethods reject: [ :m | modelMethodNames includes: m mooseName ] ]
+						ifFalse: [ "Out-of-model node: Retain all methods to reconnect the dynamic trace to the main graph" ].
+
+					"Construct graph edges for the identified dynamic callees."
+					nextDynamicMethods do: [ :eachMethod | "Stub is forced to false to guarantee continuous graph expansion"
+						node addCallee: (builder nodeForMethodSignature: eachMethod signature kind: eachMethod parentType stub: false) ] ] ]
 ]

@@ -11,16 +11,14 @@ Class {
 
 { #category : 'tests' }
 CGContextualizerExample1Test >> testCollectStackMethodsFrom [
-
 	| methods |
 	methods := CGContextualizer new collectCallStackMethodsFrom: self callStackModel.
-	
+
 	self assert: methods size equals: 3.
-	
+
 	self assert: methods first mooseName equals: 'example1.A1.main(String[])'.
 	self assert: methods second mooseName equals: 'example1.B1.method(String[])'.
 	self assert: methods third mooseName equals: 'java.lang.Runtime.exec(String)'
-	
 ]
 
 { #category : 'tests' }
