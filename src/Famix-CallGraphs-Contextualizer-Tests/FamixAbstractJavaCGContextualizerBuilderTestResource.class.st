@@ -112,7 +112,7 @@ FamixAbstractJavaCGContextualizerBuilderTestResource >> javaSourcesFolder [
 
 { #category : 'accessing' }
 FamixAbstractJavaCGContextualizerBuilderTestResource >> librariesModels [
-
+	
 	^ librariesModels
 ]
 
