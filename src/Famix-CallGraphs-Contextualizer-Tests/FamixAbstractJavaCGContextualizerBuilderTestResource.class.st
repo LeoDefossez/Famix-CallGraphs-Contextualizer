@@ -13,6 +13,46 @@ Class {
 }
 
 { #category : 'accessing' }
+FamixAbstractJavaCGContextualizerBuilderTestResource class >> autoClasspathFile [
+
+	| file |
+	file := FamixCallGraphContextualizerBridge sources
+	        / ('libs' , self sourcePath asFileReference basename) .
+	file exists ifFalse: [ self buildExternalDependencies ].
+
+	^ file asFileLocatorOrReference
+]
+
+{ #category : 'accessing' }
+FamixAbstractJavaCGContextualizerBuilderTestResource class >> buildExternalDependencies [
+	"Compile external java files and package them into a jar automatically"
+
+	| sourcesPath cmd libsDir |
+	"Retrieve configuration"
+	sourcesPath := FamixCallGraphContextualizerBridge sources fullName.
+	libsDir := 'libs' , self sourcePath asFileLocatorOrReference basename.
+
+	"Build the shell command using a stream for readability and performance"
+	cmd := String streamContents: [ :stream | 
+					"1. Navigate to the root sources folder safely using quotes"
+			       stream << 'cd "' << sourcesPath << '" && '.
+
+			       "2. Create the target library directory if it does not exist"
+			       stream << 'mkdir -p ' << libsDir << ' && '.
+
+			       "3. Create jar of each external dependencies"
+			       self externalSourcesFolders do: [ :each | 
+							"3.1. Compile java sources. No quotes around the path to allow *.java expansion"
+					       stream << 'javac ' << each basename << '/*.java && '.
+
+					       "3.2. Package compiled classes into a jar file inside the libs folder"
+					       stream << 'jar cvf ' << libsDir << '/' << each basename << '.jar ' << each basename << '/*.class' ] ].
+
+	"Execute the built command"
+	LibC runCommand: cmd
+]
+
+{ #category : 'accessing' }
 FamixAbstractJavaCGContextualizerBuilderTestResource class >> callStackFile [
 	"Return the java file containing the sources to parse for those tests"
 
@@ -31,9 +71,27 @@ FamixAbstractJavaCGContextualizerBuilderTestResource class >> externalSourcesFol
 
 	| folders |
 	folders := (FamixCallGraphContextualizerBridge sources children select: #isDirectory) select: [ :each |
-		           each basename beginsWith: self sourcePath , 'External' ].
-
+		           each basename includesSubstring: self sourcePath asFileReference basename , 'External' ].
 	^ folders
+]
+
+{ #category : 'accessing' }
+FamixAbstractJavaCGContextualizerBuilderTestResource class >> generateLibs [
+
+	| sourcesPath baseName libName command |
+	
+	sourcesPath := FamixCallGraphContextualizerBridge sources fullName.
+	baseName := self sourcePath asFileReference basename.
+	libName := 'libs' , baseName.
+
+	command := 'cd "' , sourcesPath , '" && mkdir -p ' , libName.
+	self externalSourcesFolders do: [ :each |
+			command := command , ' && javac ' , '"' , each pathString , '/*.java' , '" && jar cvf ' , libName , '/'
+			           , each basename , '.jar ' , each basename , '/*.class' ].
+
+
+	"3. Exécution"
+	LibC runCommand: command
 ]
 
 { #category : 'accessing' }
@@ -64,7 +122,7 @@ FamixAbstractJavaCGContextualizerBuilderTestResource class >> javaSourcesFolder 
 FamixAbstractJavaCGContextualizerBuilderTestResource class >> sourcePath [
 
 	^ (FamixCallGraphContextualizerBridge sources
-	  / ((self name withoutPrefix: 'CGContextualizer') withoutSuffix: 'Resource') uncapitalized) pathString
+	  / ((self name withoutPrefix: 'CGContextualizer') withoutSuffix: 'Resource') uncapitalized) pathString 
 ]
 
 { #category : 'accessing' }
@@ -124,9 +182,13 @@ FamixAbstractJavaCGContextualizerBuilderTestResource >> librariesModels [
 FamixAbstractJavaCGContextualizerBuilderTestResource >> setUp [
 
 	super setUp.
+	javaMainModel := (FamixJavaFoldersImporter new
+		                  autoClasspath: self class autoClasspathFile; 
+		                  folders: { self javaSourcesFolder };
+		                  import) anyOne.
 
-	javaMainModel := (FamixJavaFoldersImporter importFolders: { self javaSourcesFolder }) anyOne.
 	callStackModel := CallStackJsonReader import: self callStackFile.
+
 	librariesModels := FamixJavaFoldersImporter new
 		                   folders: self javaExternalSourcesFolders;
 		                   import

@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-CGContextualizerExample2Resource class >> externalSourcesFolders [
+CGContextualizerExample2Resource class >> javaExternalSourcesFolders [
 
 	^ {  }
 ]
