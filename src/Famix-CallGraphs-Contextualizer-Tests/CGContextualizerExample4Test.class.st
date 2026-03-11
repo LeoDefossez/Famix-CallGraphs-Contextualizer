@@ -45,9 +45,9 @@ CGContextualizerExample4Test >> testInferedBuildGraph [
 CGContextualizerExample4Test >> testInferedRun [
 
 	| tracedNodes methodsName |
-	tracedNodes := self inferedContextualizer run first.
+	tracedNodes := self inferedContextualizer run at: self callStackModel.
 
-	methodsName := tracedNodes collect: [ :each | each key realMethod mooseName ].
+	methodsName := tracedNodes collect: [ :each | each realMethod mooseName ].
 
 	self assert: methodsName size equals: 4.
 
@@ -81,9 +81,9 @@ CGContextualizerExample4Test >> testStrictRun [
 
 	| tracedNodes methodsName |
 	"Here the result is not the same as the stack because we do not have access to the external dependencies on the graph"
-	tracedNodes := self strictContextualizer run first.
+	tracedNodes := self strictContextualizer run at: self callStackModel.
 
-	methodsName := tracedNodes collect: [ :each | each key realMethod mooseName ].
+	methodsName := tracedNodes collect: [ :each | each realMethod mooseName ].
 
 	self assert: methodsName size equals: 4.
 

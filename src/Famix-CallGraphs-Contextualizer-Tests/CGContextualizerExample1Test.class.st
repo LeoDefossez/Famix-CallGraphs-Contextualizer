@@ -46,9 +46,9 @@ CGContextualizerExample1Test >> testInferedBuildGraph [
 CGContextualizerExample1Test >> testInferedRun [
 
 	| tracedNodes methodsName |
-	tracedNodes := self inferedContextualizer run first.
+	tracedNodes := self inferedContextualizer run at: self callStackModel.
 
-	methodsName := tracedNodes collect: [ :each | each key realMethod mooseName ].
+	methodsName := tracedNodes collect: [ :each | each realMethod mooseName ].
 
 	self assert: tracedNodes size equals: 3.
 
@@ -79,9 +79,9 @@ CGContextualizerExample1Test >> testStrictBuildGraph [
 CGContextualizerExample1Test >> testStrictRun [
 
 	| tracedNodes methodsName |
-	tracedNodes := self strictContextualizer run first.
+	tracedNodes := self strictContextualizer run at: self callStackModel.
 
-	methodsName := tracedNodes collect: [ :each | each key realMethod mooseName ].
+	methodsName := tracedNodes collect: [ :each | each realMethod mooseName ].
 
 	self assert: tracedNodes size equals: 3.
 

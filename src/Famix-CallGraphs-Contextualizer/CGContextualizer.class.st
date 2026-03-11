@@ -21,7 +21,8 @@ Class {
 		'callStackModels',
 		'graph',
 		'entryPoints',
-		'graphBuilder'
+		'graphBuilder',
+		'tracedNodesPerCallStackModel'
 	],
 	#category : 'Famix-CallGraphs-Contextualizer',
 	#package : 'Famix-CallGraphs-Contextualizer'
@@ -37,16 +38,13 @@ CGContextualizer class >> apply: aCSModel on: aGraph [
 CGContextualizer >> apply: aCSModel on: aGraph [
 
 	| callStackSequence tracedNodes |
-	
 	"Collecting all methods on the stack in order of the stack"
 	callStackSequence := self collectCallStackMethodsFrom: aCSModel.
 
 	"Add additionnals properties on the graph"
 	tracedNodes := self tracePath: callStackSequence in: aGraph.
 
-
-	"Offer a simple view to read added informations"
-	^ self formatTracedNodes: tracedNodes
+	tracedNodesPerCallStackModel at: aCSModel put: tracedNodes.
 ]
 
 { #category : 'as yet unclassified' }
@@ -127,7 +125,8 @@ CGContextualizer >> initialNodeFor: aGraph [
 { #category : 'as yet unclassified' }
 CGContextualizer >> initialize [
 
-	graphBuilder := FamixJavaCHABuilder new
+	graphBuilder := FamixJavaCHABuilder new.
+	tracedNodesPerCallStackModel := Dictionary new
 ]
 
 { #category : 'settings' }
@@ -152,7 +151,10 @@ CGContextualizer >> propertyName [
 CGContextualizer >> run [
 
 	self buildGraph.
-	^ callStackModels collect: [ :each | self apply: each on: graph ]
+
+	callStackModels do: [ :each | self apply: each on: graph ].
+
+	^ tracedNodesPerCallStackModel
 ]
 
 { #category : 'as yet unclassified' }
@@ -177,4 +179,16 @@ CGContextualizer >> tracePath: callStackSequence in: aGraph [
 			tracedNodes add: currentNode ].
 
 	^ tracedNodes
+]
+
+{ #category : 'as yet unclassified' }
+CGContextualizer >> tracedNodesForCallStackModel: aCSModel [
+
+	^ tracedNodesPerCallStackModel at: aCSModel ifPresent: [ :nodes | self formatTracedNodes: nodes ] ifAbsent: [ nil ]
+]
+
+{ #category : 'as yet unclassified' }
+CGContextualizer >> tracedNodesPerCallStackModel [
+
+	^ tracedNodesPerCallStackModel
 ]
