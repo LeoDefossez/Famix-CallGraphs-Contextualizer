@@ -12,9 +12,8 @@ CGInferedContextualizer >> createReflectivesHookOn: aGraphBuilder withWorkspace:
 	stacklines := callStackModels flatCollect: [ :each | each allWithType: FamixCSStackline ].
 
 	"Convert to Set to ensure O(1) lookup performance inside the reflective hook"
-	modelMethodNames := ({ mainModel } , librariesModels flatCollect: [ :each | each allMethods ])
-		                    collect: #mooseName
-		                    as: Set.
+	modelMethodNames := (({ mainModel } , librariesModels flatCollect: [ :each | each allMethods ]) reject: [ :each |
+		                     each isStub ]) collect: #mooseName as: Set.
 
 	aGraphBuilder reflectiveHook: [ :node :builder |
 			workspace interModelModeDuring: [
