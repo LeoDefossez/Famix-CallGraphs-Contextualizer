@@ -60,7 +60,7 @@ CGContextualizer >> buildGraph [
 
 	graph := workspace interModelModeDuring: [
 			         graphBuilder
-				         entryPoints: entryPoints;
+				         entryPoints: entryPoints asArray;
 				         build ]
 ]
 
