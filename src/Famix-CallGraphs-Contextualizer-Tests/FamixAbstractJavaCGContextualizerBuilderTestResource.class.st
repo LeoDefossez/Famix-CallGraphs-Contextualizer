@@ -31,9 +31,7 @@ FamixAbstractJavaCGContextualizerBuilderTestResource class >> externalSourcesFol
 
 	| folders |
 	folders := (FamixCallGraphContextualizerBridge sources children select: #isDirectory) select: [ :each |
-			           each basename beginsWith:
-				           ((self name withoutPrefix: 'CGContextualizer') withoutSuffix: 'Resource') uncapitalized
-				           , 'External' ].
+		           each basename beginsWith: self sourcePath , 'External' ].
 
 	^ folders
 ]
@@ -43,7 +41,7 @@ FamixAbstractJavaCGContextualizerBuilderTestResource class >> javaExternalSource
 	"Return the java folder containing the sources to parse for those tests"
 
 	| folders |
-	folders := self externalSourcesFolders collect: [ :each | each ].
+	folders := self externalSourcesFolders.
 
 	folders do: [ :each | each ifAbsent: [ self error: 'Folder does not exists ' , each pathString ] ].
 
@@ -63,13 +61,19 @@ FamixAbstractJavaCGContextualizerBuilderTestResource class >> javaSourcesFolder 
 ]
 
 { #category : 'accessing' }
+FamixAbstractJavaCGContextualizerBuilderTestResource class >> sourcePath [
+
+	^ (FamixCallGraphContextualizerBridge sources
+	  / ((self name withoutPrefix: 'CGContextualizer') withoutSuffix: 'Resource') uncapitalized) pathString
+]
+
+{ #category : 'accessing' }
 FamixAbstractJavaCGContextualizerBuilderTestResource class >> sourcesFolder [
 	"Return the java folder containing the sources to parse for those tests"
 
 	| folder |
-	folder := FamixCallGraphContextualizerBridge sources
-	          / ((self name withoutPrefix: 'CGContextualizer') withoutSuffix: 'Resource') uncapitalized.
-	
+	folder := self sourcePath asFileReference.
+
 	folder ifAbsent: [ self error: 'Folder does not exists ' , folder pathString ].
 
 	^ folder
@@ -120,10 +124,12 @@ FamixAbstractJavaCGContextualizerBuilderTestResource >> librariesModels [
 FamixAbstractJavaCGContextualizerBuilderTestResource >> setUp [
 
 	super setUp.
-	
+
 	javaMainModel := (FamixJavaFoldersImporter importFolders: { self javaSourcesFolder }) anyOne.
 	callStackModel := CallStackJsonReader import: self callStackFile.
-	librariesModels := FamixJavaFoldersImporter importFolders: self javaExternalSourcesFolders
+	librariesModels := FamixJavaFoldersImporter new
+		                   folders: self javaExternalSourcesFolders;
+		                   import
 ]
 
 { #category : 'accessing' }

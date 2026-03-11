@@ -81,10 +81,7 @@ CGContextualizerExample3Test >> testStrictBuildGraph [
 CGContextualizerExample3Test >> testStrictRun [
 
 	| tracedNodes methodsName |
-	self skip. "Skipped because the problem seems to come from FamixBridge"
-	self flag:#todo. "correct this test case"
 	tracedNodes := self strictContextualizer run first.
-	self halt.
 	methodsName := tracedNodes collect: [ :each | each key realMethod mooseName ].
 
 	self assert: tracedNodes size equals: 4.
