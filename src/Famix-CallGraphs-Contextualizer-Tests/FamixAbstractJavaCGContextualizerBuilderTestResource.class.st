@@ -33,7 +33,7 @@ FamixAbstractJavaCGContextualizerBuilderTestResource class >> externalSourcesFol
 	folders := (FamixCallGraphContextualizerBridge sources children select: #isDirectory) select: [ :each |
 			           each basename beginsWith:
 				           ((self name withoutPrefix: 'CGContextualizer') withoutSuffix: 'Resource') uncapitalized
-				           , 'ExternalDependencies' ].
+				           , 'External' ].
 
 	^ folders
 ]
@@ -43,7 +43,7 @@ FamixAbstractJavaCGContextualizerBuilderTestResource class >> javaExternalSource
 	"Return the java folder containing the sources to parse for those tests"
 
 	| folders |
-	folders := self externalSourcesFolders collect: [ :each | each / 'src' ].
+	folders := self externalSourcesFolders collect: [ :each | each ].
 
 	folders do: [ :each | each ifAbsent: [ self error: 'Folder does not exists ' , each pathString ] ].
 
