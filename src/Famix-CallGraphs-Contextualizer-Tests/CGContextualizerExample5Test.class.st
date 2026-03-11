@@ -1,8 +1,5 @@
-"
-A CGContextualizerTest is a test class for testing the behavior of CGContextualizer
-"
 Class {
-	#name : 'CGContextualizerExample1Test',
+	#name : 'CGContextualizerExample5Test',
 	#superclass : 'FamixAbstractJavaCGContextualizerBuilderTestCase',
 	#category : 'Famix-CallGraphs-Contextualizer-Tests-Tests',
 	#package : 'Famix-CallGraphs-Contextualizer-Tests',
@@ -10,7 +7,7 @@ Class {
 }
 
 { #category : 'tests' }
-CGContextualizerExample1Test >> testCollectStackMethodsFrom [
+CGContextualizerExample5Test >> testCollectStackMethodsFrom [
 
 	| methods methodsName |
 	methods := CGContextualizer new collectCallStackMethodsFrom: self callStackModel.
@@ -19,73 +16,71 @@ CGContextualizerExample1Test >> testCollectStackMethodsFrom [
 
 	methodsName := methods collect: [ :each | each mooseName ].
 
-	self assert: methodsName first equals: 'example1.A1.main(String[])'.
-	self assert: methodsName second equals: 'example1.B1.method(String[])'.
+	self assert: methodsName first equals: 'example5.A5.main(String[])'.
+	self assert: methodsName second equals: 'example5.C5.method()'.
 	self assert: methodsName third equals: 'java.lang.Runtime.exec(String)'
 ]
 
 { #category : 'tests' }
-CGContextualizerExample1Test >> testInferedBuildGraph [
+CGContextualizerExample5Test >> testInferedBuildGraph [
 	"This method is here to ensure the graph building works"
 
 	| nodes methodsName |
 	nodes := self inferedContextualizer buildGraph graph
-		               findPathFromNodeNamed: 'example1.A1.main(String[])'
-		               toNodeNamed: 'java.lang.Runtime.exec(String)'.
+		         findPathFromNodeNamed: 'example5.A5.main(String[])'
+		         toNodeNamed: 'java.lang.Runtime.exec(String)'.
 
 	methodsName := nodes collect: [ :each | each realMethod mooseName ].
 
-	self assert: nodes size equals: 3.
-
-	self assert: methodsName first equals: 'example1.A1.main(String[])'.
-	self assert: methodsName second equals: 'example1.B1.method(String[])'.
+	self assert: methodsName first equals: 'example5.A5.main(String[])'.
+	self assert: methodsName second equals: 'example5.C5.method()'.
 	self assert: methodsName third equals: 'java.lang.Runtime.exec(String)'
 ]
 
 { #category : 'tests' }
-CGContextualizerExample1Test >> testInferedRun [
+CGContextualizerExample5Test >> testInferedRun [
 
 	| tracedNodes methodsName |
 	tracedNodes := self inferedContextualizer run first.
 
 	methodsName := tracedNodes collect: [ :each | each key realMethod mooseName ].
 
-	self assert: tracedNodes size equals: 3.
+	self assert: methodsName size equals: 3.
 
-	self assert: methodsName first equals: 'example1.A1.main(String[])'.
-	self assert: methodsName second equals: 'example1.B1.method(String[])'.
+	self assert: methodsName first equals: 'example5.A5.main(String[])'.
+	self assert: methodsName second equals: 'example5.C5.method()'.
 	self assert: methodsName third equals: 'java.lang.Runtime.exec(String)'
 ]
 
 { #category : 'tests' }
-CGContextualizerExample1Test >> testStrictBuildGraph [
+CGContextualizerExample5Test >> testStrictBuildGraph [
 	"This method is here to ensure the graph building works"
 
 	| nodes methodsName |
 	nodes := self strictContextualizer buildGraph graph
-		               findPathFromNodeNamed: 'example1.A1.main(String[])'
-		               toNodeNamed: 'java.lang.Runtime.exec(String)'.
+		         findPathFromNodeNamed: 'example5.A5.main(String[])'
+		         toNodeNamed: 'java.lang.Runtime.exec(String)'.
 
 	methodsName := nodes collect: [ :each | each realMethod mooseName ].
 
-	self assert: nodes size equals: 3.
+	self assert: methodsName size equals: 3.
 
-	self assert: methodsName first equals: 'example1.A1.main(String[])'.
-	self assert: methodsName second equals: 'example1.B1.method(String[])'.
+	self assert: methodsName first equals: 'example5.A5.main(String[])'.
+	self assert: methodsName second equals: 'example5.C5.method()'.
 	self assert: methodsName third equals: 'java.lang.Runtime.exec(String)'
 ]
 
 { #category : 'tests' }
-CGContextualizerExample1Test >> testStrictRun [
+CGContextualizerExample5Test >> testStrictRun [
 
 	| tracedNodes methodsName |
 	tracedNodes := self strictContextualizer run first.
 
 	methodsName := tracedNodes collect: [ :each | each key realMethod mooseName ].
 
-	self assert: tracedNodes size equals: 3.
+	self assert: methodsName size equals: 3.
 
-	self assert: methodsName first equals: 'example1.A1.main(String[])'.
-	self assert: methodsName second equals: 'example1.B1.method(String[])'.
+	self assert: methodsName first equals: 'example5.A5.main(String[])'.
+	self assert: methodsName second equals: 'example5.C5.method()'.
 	self assert: methodsName third equals: 'java.lang.Runtime.exec(String)'
 ]

@@ -9,18 +9,17 @@ Class {
 { #category : 'tests' }
 CGContextualizerExample2Test >> testCollectStackMethodsFrom [
 
-	| methods |
+	| methods methodsName |
 	methods := CGContextualizer new collectCallStackMethodsFrom: self callStackModel.
-	
+
 	self assert: methods size equals: 4.
-	
-	
-	self assert: methods first mooseName equals: 'example2.A2.main(String[])'.
-	self assert: methods second mooseName equals: 'example2External.B2.method(Object)'.
-	self assert: methods third mooseName equals: 'example2.A2.toString()'.
-	self assert: methods fourth mooseName equals: 'java.lang.Runtime.exec(String)'
-	
-	
+
+	methodsName := methods collect: [ :each | each mooseName ].
+
+	self assert: methodsName first equals: 'example2.A2.main(String[])'.
+	self assert: methodsName second equals: 'example2External.B2.method(Object)'.
+	self assert: methodsName third equals: 'example2.A2.toString()'.
+	self assert: methodsName fourth equals: 'java.lang.Runtime.exec(String)'
 ]
 
 { #category : 'tests' }

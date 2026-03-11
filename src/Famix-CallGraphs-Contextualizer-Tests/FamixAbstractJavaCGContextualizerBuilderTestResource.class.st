@@ -183,7 +183,7 @@ FamixAbstractJavaCGContextualizerBuilderTestResource >> setUp [
 
 	super setUp.
 	javaMainModel := (FamixJavaFoldersImporter new
-		                  autoClasspath: self class autoClasspathFile; 
+		                  autoClasspath: (self class autoClasspathFile ifAbsent: [ nil ]);
 		                  folders: { self javaSourcesFolder };
 		                  import) anyOne.
 
