@@ -55,13 +55,13 @@ CGContextualizer >> buildGraph [
 	| workspace |
 	workspace := MooseWorkspace new mainModel: mainModel.
 	librariesModels do: [ :each | workspace addLibraryModel: each ].
-	
-	self createReflectivesHookOn: graphBuilder withWorkspace: workspace .
 
-	graph := workspace interModelModeDuring: [
-			         graphBuilder
-				         entryPoints: entryPoints asArray;
-				         build ]
+	self createReflectivesHookOn: graphBuilder withWorkspace: workspace.
+
+	^ graph := workspace interModelModeDuring: [
+			           graphBuilder
+				           entryPoints: entryPoints asArray;
+				           build ]
 ]
 
 { #category : 'settings' }

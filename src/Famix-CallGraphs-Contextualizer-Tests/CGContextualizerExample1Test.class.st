@@ -29,7 +29,7 @@ CGContextualizerExample1Test >> testInferedBuildGraph [
 	"This method is here to ensure the graph building works"
 
 	| nodes methodsName |
-	nodes := self inferedContextualizer buildGraph graph
+	nodes := self inferedContextualizer buildGraph
 		               findPathFromNodeNamed: 'example1.A1.main(String[])'
 		               toNodeNamed: 'java.lang.Runtime.exec(String)'.
 
@@ -62,7 +62,7 @@ CGContextualizerExample1Test >> testStrictBuildGraph [
 	"This method is here to ensure the graph building works"
 
 	| nodes methodsName |
-	nodes := self strictContextualizer buildGraph graph
+	nodes := self strictContextualizer buildGraph
 		               findPathFromNodeNamed: 'example1.A1.main(String[])'
 		               toNodeNamed: 'java.lang.Runtime.exec(String)'.
 

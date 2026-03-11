@@ -27,7 +27,7 @@ CGContextualizerExample2Test >> testInferedBuildGraph [
 	"This method is here to ensure the graph building works"
 
 	| nodes methodsName |
-	nodes := self inferedContextualizer buildGraph graph
+	nodes := self inferedContextualizer buildGraph
 		         findPathFromNodeNamed: 'example2.A2.main(String[])'
 		         toNodeNamed: 'java.lang.Runtime.exec(String)'.
 
@@ -65,7 +65,7 @@ CGContextualizerExample2Test >> testStrictBuildGraph [
 	"There should be no path, so an error is thrown"
 	self
 		should: [ 
-				self strictContextualizer buildGraph graph
+				self strictContextualizer buildGraph
 					findPathFromNodeNamed: 'example2.A2.main(String[])'
 					toNodeNamed: 'java.lang.Runtime.exec(String)' ]
 		raise: Error
